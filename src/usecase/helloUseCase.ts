@@ -1,12 +1,7 @@
 // UseCase層: ビジネスロジック
 import { HelloRepository, HelloMessageVO } from '@/domain/hello';
 
-export interface HelloUseCase {
-  getHelloMessage(): Promise<HelloMessageVO>;
-  getRawMessage(): Promise<HelloMessageVO>;
-}
-
-export class HelloUseCaseImpl implements HelloUseCase {
+export class HelloUseCase {
   constructor(private readonly repository: HelloRepository) {}
 
   async getHelloMessage(): Promise<HelloMessageVO> {

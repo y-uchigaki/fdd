@@ -3,28 +3,23 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchHelloMessage, fetchRawMessage } from '@/store/helloSlice';
-import { HelloUseCaseImpl } from '@/usecase/helloUseCase';
+import { HelloUseCase } from '@/usecase/helloUseCase';
 import { HelloApiRepository } from '@/repository/helloRepository';
+import { HelloModules } from '@/modules/hello/HelloModules';
 
 // Hello Component
 const HelloComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const { message, loading, error } = useAppSelector((state) => state.hello);
-
+  const modules = new HelloModules();
   useEffect(() => {
-    // UseCaseとRepositoryのインスタンスを作成
-    const repository = new HelloApiRepository();
-    const useCase = new HelloUseCaseImpl(repository);
-    
     // ReduxのAsyncThunkを呼び出し
-    dispatch(fetchHelloMessage(useCase));
+    dispatch(fetchHelloMessage(modules.useCase));
   }, [dispatch]);
 
   const handleButtonClick = () => {
-    const repository = new HelloApiRepository();
-    const useCase = new HelloUseCaseImpl(repository);
     // ボタンを押すとRepositoryから生の「hell」を取得して表示
-    dispatch(fetchRawMessage(useCase));
+    dispatch(fetchRawMessage(modules.useCase));
   };
 
   if (loading) {

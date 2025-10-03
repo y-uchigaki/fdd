@@ -29,10 +29,3 @@ export class HelloApiRepository implements HelloRepository {
   }
 }
 
-// モック用のRepository（開発・テスト用）
-export class MockHelloRepository implements HelloRepository {
-  async getHelloMessage(): Promise<HelloMessageVO> {
-    // モックデータとして「hell」を返す
-    return new HelloMessageVO('hell');
-  }
-}
