@@ -1,7 +1,6 @@
 // State管理層: Redux Store
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { HelloMessageVO } from '@/domain/hello';
-import { HelloUseCase } from '@/usecase/helloUseCase';
 
 // State型定義
 export interface HelloState {
@@ -20,12 +19,19 @@ const initialState: HelloState = {
   error: null,
 };
 
-// Async Thunk: UseCaseを呼び出してデータを取得（初期表示用）
+// Async Thunk: UseCaseから呼び出される（初期表示用）
 export const fetchHelloMessage = createAsyncThunk(
   'hello/fetchMessage',
-  async (useCase: HelloUseCase, { rejectWithValue }) => {
+  async (payload: string, { rejectWithValue }) => {
     try {
+      // UseCaseを動的に作成してメッセージを取得
+      const { HelloApiRepository } = await import('@/repository/helloRepository');
+      const { HelloUseCase } = await import('@/usecase/helloUseCase');
+      
+      const repository = new HelloApiRepository();
+      const useCase = new HelloUseCase(repository);
       const message = await useCase.getHelloMessage();
+      
       return {
         message: message.message,
         timestamp: message.timestamp.toISOString()
@@ -36,12 +42,19 @@ export const fetchHelloMessage = createAsyncThunk(
   }
 );
 
-// Async Thunk: 生のメッセージを取得（ボタン押下時）
+// Async Thunk: UseCaseから呼び出される（ボタン押下時）
 export const fetchRawMessage = createAsyncThunk(
   'hello/fetchRawMessage',
-  async (useCase: HelloUseCase, { rejectWithValue }) => {
+  async (payload: string, { rejectWithValue }) => {
     try {
+      // UseCaseを動的に作成してメッセージを取得
+      const { HelloApiRepository } = await import('@/repository/helloRepository');
+      const { HelloUseCase } = await import('@/usecase/helloUseCase');
+      
+      const repository = new HelloApiRepository();
+      const useCase = new HelloUseCase(repository);
       const message = await useCase.getRawMessage();
+      
       return {
         message: message.message,
         timestamp: message.timestamp.toISOString()

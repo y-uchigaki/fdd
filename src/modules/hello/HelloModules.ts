@@ -5,8 +5,8 @@ export class HelloModules {
     private repository: HelloApiRepository;
     public useCase: HelloUseCase;
 
-    constructor() {
+    constructor(dispatch?: (action: any) => void) {
         this.repository = new HelloApiRepository();
-        this.useCase = new HelloUseCase(this.repository);
+        this.useCase = new HelloUseCase(this.repository, dispatch);
     }
 }

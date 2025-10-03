@@ -2,7 +2,10 @@
 import { HelloRepository, HelloMessageVO } from '@/domain/hello';
 
 export class HelloUseCase {
-  constructor(private readonly repository: HelloRepository) {}
+  constructor(
+    private readonly repository: HelloRepository,
+    private readonly dispatch?: (action: any) => void
+  ) {}
 
   async getHelloMessage(): Promise<HelloMessageVO> {
     try {
@@ -31,6 +34,28 @@ export class HelloUseCase {
       // エラー時はフォールバックメッセージを返す
       return new HelloMessageVO('hell');
     }
+  }
+
+  // Redux dispatch経由でメッセージを取得（初期表示用）
+  async fetchHelloMessage(): Promise<void> {
+    if (!this.dispatch) {
+      throw new Error('Dispatch is not available');
+    }
+    
+    // Reduxのaction creatorを動的にimportして呼び出し
+    const { fetchHelloMessage } = await import('@/store/helloSlice');
+    this.dispatch(fetchHelloMessage('hello'));
+  }
+
+  // Redux dispatch経由で生メッセージを取得（ボタン押下時）
+  async fetchRawMessage(): Promise<void> {
+    if (!this.dispatch) {
+      throw new Error('Dispatch is not available');
+    }
+    
+    // Reduxのaction creatorを動的にimportして呼び出し
+    const { fetchRawMessage } = await import('@/store/helloSlice');
+    this.dispatch(fetchRawMessage('raw'));
   }
 
   private transformMessage(message: string): string {

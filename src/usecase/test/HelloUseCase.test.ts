@@ -1,5 +1,4 @@
 // HelloUseCase のテスト
-import '../test/setup';
 import { HelloUseCase } from '../helloUseCase';
 import { HelloRepository, HelloMessageVO } from '@/domain/hello';
 
